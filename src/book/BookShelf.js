@@ -5,13 +5,13 @@ class BookShelf extends React.Component {
     render() {
         return (
             <div className="bookshelf">
-                <h2 className="bookshelf-title">Currently Reading</h2>
+                <h2 className="bookshelf-title">{this.props.title}</h2>
                 <div className="bookshelf-books">
                     <ol className="books-grid">
-                        {this.props.books.map((book) => {
+                        {this.props.books && this.props.books.map((book) => {
                             return (
                                 <li key={book.id}>
-                                    <Book book={book} />
+                                    <Book onBookMoved={this.props.onBookMoved} book={book} />
                                 </li>
                             )
                         })}

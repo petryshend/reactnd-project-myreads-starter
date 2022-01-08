@@ -2,20 +2,51 @@ import React from "react";
 import BookShelf from "./BookShelf";
 import {getAll} from "../BooksAPI";
 
-class BookList extends React.Component {
+const shelves = {
+    currentlyReading: 'Currently reading',
+    wantToRead: 'Want to read',
+    read: 'Read'
+};
 
+class BookList extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            books: []
+            books: {}
         }
     }
 
-    componentDidMount() {
-        getAll().then(res => {
-            this.setState({books: res});
+    componentDidMount = () => {
+        getAll().then(books => {
+            const booksShelf = {};
+            for (const book of books) {
+                if (booksShelf[book.shelf]) {
+                    booksShelf[book.shelf].push(book);
+                } else {
+                    booksShelf[book.shelf] = [book];
+                }
+            }
+            this.setState({books: booksShelf});
         });
+    }
+
+    moveBookToShelf = (book, shelf) => {
+        this.setState((state) => {
+            state.books[book.shelf] = state.books[book.shelf].filter((oldBook) => {
+                return oldBook.id !== book.id;
+            });
+            if (!(shelf in state.books)) {
+                return state;
+            }
+
+            const newBook = {
+                ...book,
+                shelf
+            }
+            state.books[shelf].push(newBook);
+            return state;
+        })
     }
 
     render() {
@@ -26,15 +57,9 @@ class BookList extends React.Component {
                 </div>
                 <div className="list-books-content">
                     <div>
-                        <BookShelf books={this.state.books.filter(book => {
-                            return book.shelf === 'currentlyReading';
-                        })} />
-                        <BookShelf books={this.state.books.filter(book => {
-                            return book.shelf === 'wantToRead';
-                        })} />
-                        <BookShelf books={this.state.books.filter(book => {
-                            return book.shelf === 'read';
-                        })} />
+                        {Object.keys(shelves).map((key) => {
+                            return <BookShelf key={key} title={shelves[key]} books={this.state.books[key]} onBookMoved={this.moveBookToShelf} />
+                        })}
                     </div>
                 </div>
                 <div className="open-search">
