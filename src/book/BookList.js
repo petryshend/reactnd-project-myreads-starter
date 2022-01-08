@@ -1,6 +1,7 @@
 import React from "react";
 import BookShelf from "./BookShelf";
 import {getAll} from "../BooksAPI";
+import {Link} from "react-router-dom";
 
 const shelves = {
     currentlyReading: 'Currently reading',
@@ -62,9 +63,11 @@ class BookList extends React.Component {
                         })}
                     </div>
                 </div>
-                <div className="open-search">
-                    <button onClick={this.props.onShowSearchPage}>Add a book</button>
-                </div>
+                <Link to="/search">
+                    <div className="open-search">
+                        <button>Add a book</button>
+                    </div>
+                </Link>
             </div>
         )
     }
