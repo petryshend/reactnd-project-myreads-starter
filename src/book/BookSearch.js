@@ -17,6 +17,16 @@ class BookSearch extends React.Component {
         search(event.target.value)
             .then(res => {
                 if (Array.isArray(res)) {
+                    for (const shelf of Object.keys(this.props.books)) {
+                        for (const book of this.props.books[shelf]) {
+                            for (const searchBook of res) {
+                                if (searchBook.id === book.id) {
+                                    searchBook.shelf = book.shelf;
+                                }
+                            }
+                        }
+                    }
+
                     this.setState({searchResults: res});
                 } else {
                     this.setState({searchResults: []});

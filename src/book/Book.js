@@ -7,7 +7,8 @@ class Book extends React.Component {
         super(props);
 
         this.state = {
-            loading: false
+            loading: false,
+            shelf: this.props.book.shelf
         }
     }
 
@@ -16,7 +17,7 @@ class Book extends React.Component {
         const moveToShelf = event.target.value;
         update(this.props.book, moveToShelf)
             .then(() => {
-                this.setState({loading: false});
+                this.setState({loading: false, shelf: moveToShelf});
                 this.props.onBookMoved(this.props.book, moveToShelf);
             });
     }
@@ -31,7 +32,7 @@ class Book extends React.Component {
                         <div className={"book-cover " + (this.state.loading ? 'loading' : '')} style={{ width: 128, height: 193, background: "lightgray" }}></div>
                     )}
                     <div className="book-shelf-changer">
-                        <select onChange={this.updateBookShelf} value={this.props.book.shelf ? this.props.book.shelf : 'none'}>
+                        <select onChange={this.updateBookShelf} value={this.state.shelf ? this.state.shelf: 'none'}>
                             <option value="move" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>

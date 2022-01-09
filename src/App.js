@@ -37,7 +37,7 @@ class BooksApp extends React.Component {
 
     moveBookToShelf = (book, shelf) => {
         this.setState((state) => {
-            if (book.shelf) { // Book was already on shelf, so remove it.
+            if (book.shelf || shelf === 'none') { // Book was already on shelf, so remove it.
                 state.books[book.shelf] = state.books[book.shelf].filter((oldBook) => {
                     return oldBook.id !== book.id;
                 });
