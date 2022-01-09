@@ -13,9 +13,15 @@ class BookSearch extends React.Component {
         }
     }
 
-    componentDidMount() {
-        search('Android')
-            .then(res => this.setState({searchResults: res}));
+    doSearch = (event) => {
+        search(event.target.value)
+            .then(res => {
+                if (Array.isArray(res)) {
+                    this.setState({searchResults: res});
+                } else {
+                    this.setState({searchResults: []});
+                }
+            });
     }
 
     render() {
